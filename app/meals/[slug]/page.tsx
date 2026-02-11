@@ -6,6 +6,22 @@ import { getMealBySlug } from "@/lib/meals";
 import NotFound from "@/app/not-found";
 import { notFound } from "next/navigation";
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const meal = await getMealBySlug(slug);
+  if (!meal) {
+    notFound();
+  }
+  return {
+    title: meal.title,
+    description: meal.summary,
+  };
+}
+
 const MealsDetails = async ({
   params,
 }: {
